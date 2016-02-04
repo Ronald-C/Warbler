@@ -1,0 +1,19 @@
+{
+  "name": "warbler",
+  "version": "0.0.0",
+  "description": "Web App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://ronaldc@bitbucket.org/hungtrand/warbler.git"
+  },
+  "author": "Ronald, Hung, Kyaw",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "express": "~4.13.4",
+    "socket.io": "~1.4.5"
+  }
+}
