@@ -1,7 +1,5 @@
 function wablerSearch_controller($scope) {
-	$scope.inputText = "Type in here";
-	$scope.$on('textChange', function(ev, data) {
-		$scope.inputText = data;
-		$scope.$apply();
+	$scope.$on('warblerSearch.searchInput.submit', function(evt, data) {
+		console.log(data);
 	});
 }

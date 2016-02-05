@@ -1,6 +1,10 @@
-<form class="navbar-form text-center">
+<form class="form-horizontal text-center" style="margin-top:8px;" action="javascript:void(0);">
 	<div class="form-group">
-		<input type="search" class="form-control" />
-		<button type="submit" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i></button>
+		<div class="col-xs-9 col-sm-9 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-2 col-lg-6 col-lg-offset-2">
+			<input type="search" class="form-control" ng-model="searchInput" placeholder="Ask Warbler about an Event" />
+		</div>
+		<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 text-left">
+			<button type="submit" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i></button>
+		</div>
 	</div>
 </form>

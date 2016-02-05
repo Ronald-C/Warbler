@@ -9,26 +9,21 @@
 		<title>Warbler</title>
 	</head>
 	<body>
-		<nav class="navbar navbar-fixed-top" ng-controller="wablerSearchController">
+		<nav class="navbar navbar-inverse navbar-fixed-top" style="height: 50px;" ng-controller="wablerSearchController">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<!-- <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="#">Warbler</a>
+				</button> -->
+				<a class="navbar-brand hidden-sm hidden-xs" href="#">Warbler</a>
 			</div>
 			
-			<div class="collapse navbar-collapse" warbler-search  text="inputText">
-				
-			</div>
+			<div warbler-search></div>
 			<!--/.nav-collapse -->
-
-			<br /><br />
-			<h1>{{ inputText }}</h1>
 		</nav>
-
-		<div gmap id="gmap" class="container" style="width: 100%; height: 100%;"></div>
+		
+		<div gmap id="gmap" style="position: absolute; width: 100%; height: 100%;"></div>
 	</body>
 
 	<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
