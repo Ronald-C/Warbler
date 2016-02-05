@@ -1,13 +1,9 @@
-function warblerSearch_directive($rootScope) {
+function warblerSearch_directive() {
 	return {
-		scope: {
-			text: "=place"
-		},
 		templateUrl: 'search/warblerSearch.template.html',
 		link: function($scope, $element, $attrs) {
-			$element.find('input').on('keyup', function(e) {
-				var value = $(this).val();
-				$rootScope.$broadcast('textChange', value);
+			$element.find('form').on('submit', function(e) {
+				$scope.$emit('warblerSearch.searchInput.submit', $scope.searchInput);
 			});
 		}
 	}
