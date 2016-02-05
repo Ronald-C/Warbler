@@ -1,21 +1,41 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="warbler">
-<head>
-	<meta charset="UTF-8">
-	
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="index.css">
-
-	<title>Warbler</title>
-</head>
-
-<body>
-
-	<div gmap id="gmap" class="container"></div>
-</body>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="index.css">
+		<title>Warbler</title>
+	</head>
+	<body>
+		<nav class="navbar navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="#">Warbler</a>
+			</div>
+			
+			<div class="collapse navbar-collapse">
+				<form class="navbar-form text-center">
+					<div class="form-group">
+						<input type="search" class="form-control">
+						<button type="submit" class="btn btn-warning"><i class="glyphicon glyphicon-search"></i></button>
+					</div>
+				</form>
+			</div>
+			<!--/.nav-collapse -->
+		</nav>
+		<div gmap id="gmap" class="container"></div>
+	</body>
 	<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIawGAPo5-aceyFyRehx8zMFoun4xq764&callback=initGMap" async defer></script>
+	<script src="gmap/gmap.controller.js"></script>
+	<script src="gmap/gmap.directive.js"></script>
+	<script src="app.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDIawGAPo5-aceyFyRehx8zMFoun4xq764&callback=init" async defer></script>
 </html>
