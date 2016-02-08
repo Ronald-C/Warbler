@@ -1,5 +1,5 @@
-function wablerSearch_controller($scope) {
+function wablerSearch_controller($scope, twitterService) {
 	$scope.$on('warblerSearch.searchInput.submit', function(evt, data) {
-		console.log(data);
+		twitterService.search(data);
 	});
 }

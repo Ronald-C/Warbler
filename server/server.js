@@ -5,7 +5,8 @@ var express = require("express"),
 	server = require("http").createServer(app),
 	io = require("socket.io")(server),
 	path = require("path"),
-	Twitter = require("twitter");
+	twitter = require("twitter"),
+	twitter_factory = require('./twitter_factory.js'); 
 	
 var port = process.env.PORT || 80,
 	ip = process.env.IP || "127.1.1.1";
@@ -13,14 +14,6 @@ var port = process.env.PORT || 80,
 server.listen(port, ip);
 console.log("HTTP Servicing: " + ip + ':' + port);
 
-var twit = new Twitter({
-  consumer_key: process.env.TWITTER_CONSUMER_KEY,
-  consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-  access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
-  access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
-});
-
-// Router
 app.use(express.static(__dirname + "/../client/"));
 app.get("/index.html", function(req, res) {
 	res.sendFile(path.join(__dirname, "../client/", "index.html"));
@@ -32,3 +25,12 @@ io.on("connection", function(client) {
 	
 });
 
+twitter_factory.init(twitter);
+app.get('/services/twitter/', function(req, res) {
+	var twt = twitter_factory.create();
+	twt.geoFetch(req.query.query, function(data) {
+		console.log('***data***');
+		console.log(data);
+		res.send(data);
+	});
+});
