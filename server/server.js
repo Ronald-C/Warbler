@@ -9,7 +9,7 @@ var express = require("express"),
 	twitter_factory = require('./twitter_factory.js'); 
 	
 var port = process.env.PORT || 80,
-	ip = process.env.IP || "127.1.1.1";
+	ip = process.env.IP || "127.1.1.1" || '54.67.71.163';
 
 server.listen(port, ip);
 console.log("HTTP Servicing: " + ip + ':' + port);
