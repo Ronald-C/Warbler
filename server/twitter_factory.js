@@ -37,32 +37,29 @@ twitter_service.prototype = {
 
 	geoFetch: function(query, callback) {
 		var self = this;
-		self.client.get(
-			'search/tweets', 
+		self.client.stream(
+			'statuses/filter',
 			{
-				q: decodeURI(query),
-				count: 100
+				'locations':'-180,-90,180,90'
 			},
-
-			function(error, tweets, response) {
-			if (error) {
-				console.log(error);
-				return;
+			function(stream) {
+				stream.on('error', function(error) {
+					console.log(error);
+					return;
+				});
+				stream.on('data', function(data) {
+					// Verify JSON contains coordinates
+					if (data.coordinates && (data.coordinates !== null)) {
+						// Filter by tweet containing query
+						if(data.text.indexOf(query)) {
+							var twt = data.coordinates;
+							twt.text = data.text;
+							(callback || noop)(twt);
+						}
+					}
+				});
 			}
-
-			var statuses = tweets.statuses;
-			var geos = [];
-			for (var i = 0, l = statuses.length; i < l; i++) {
-				var o = statuses[i];
-				if (o.geo) {
-					var twt = o.geo;
-					twt.text = o.text;
-					geos.push(twt);
-				}
-			}
-
-			(callback || noop)(geos);
-		});
+		);
 
 		return self;
 	}
