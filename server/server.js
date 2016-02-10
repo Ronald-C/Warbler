@@ -19,16 +19,13 @@ app.get("/index.html", function(req, res) {
 });
 
 twitter_factory.init(twitter);
-app.get('/services/twitter/', function(req, res) {
-	var twt = twitter_factory.create();
-	twt.geoFetch(req.query.query, function(data) {
-		console.log('[DATA] : ' + JSON.stringify(data));
-		io.emit('twitter.stream', data);
-	});
-});
 
-// Listener
-io.on("connection", function(client) {
-	console.log("Client connection . . . ");
-	
+// Socket listener
+io.sockets.on('connection', function (socket) {
+	socket.on("twitter.query", function(client) {
+		var twt = twitter_factory.create();
+		twt.geoFetch(req.query.query, function(data) {
+			io.emit('twitter.stream', data);
+		});
+	});
 });
