@@ -1,5 +1,4 @@
 function twitter_service($resource, $rootScope) {
-	var client = $resource('/services/twitter/');
 	var successCallback = null;
 	var failureCallback = null;
 
@@ -24,6 +23,9 @@ function twitter_service($resource, $rootScope) {
 
 			}
 			
+			/*socket.on('connect', function() {
+				socket.emit('twitter.query', keywords);
+			});*/
 			socket.emit('twitter.query', keywords);
 
 			return this;
