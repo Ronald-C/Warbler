@@ -21,38 +21,33 @@ app.get("/index.html", function(req, res) {
 
 twitter_factory.init(twitter);
 
-var activeSocket = {};
-var streamLoop = undefined;
+var clients = {};
 
 // Socket connection listener
 io.sockets.on('connection', function (socket) {
-	activeSocket[socket.id] = socket;
-	socket.on("twitter.query", function(query) {
-		var arr = [];
-		var twt = twitter_factory.create();
-		twt.geoFetch(query, function(data) {
-			arr.push(data);
-			if(arr.length == 101) {
-				arr.shift();
-			}
-		});
-		streamLoop = setInterval(function() {
-			io.emit('twitter.stream', arr);
-			console.log(arr.length);
-		}, 10000);
-	});
-	socket.on("ACK", function() {
-	});
-});
-// Socket disconnection handler
-io.sockets.on('disconnect', function(socket) {
-	clearInterval(streamLoop);
-	socket.destroy();
-	
-	var keys = Object.keys(activeSocket);
-	for(var i = 0, l = keys.length; i < l; i++) {
-		if(keys[i] == socket.id) {
-			delete activeSocket[socket.id];
-		}
+	// Handle socket registration
+	if(clients.hasOwnProperty(socket.id)) {
+		console.log('[SERVER]: ' + socket.id + ' exists');
+		return;
+	} else {
+		console.log('[SERVER]: ' + socket.id + ' connected');
+		clients[socket.id] = socket;
 	}
+
+	// Client queries
+	socket.on("twitter.query", function(query) {
+		var twt = twitter_factory.create();
+		clients[socket.id].twt = twt;
+
+		clients[socket.id].twt.geoFetch(query, function(data) {
+			io.emit('twitter.stream', data);
+			console.log(data);
+		});
+	});
+
+	// Socket disconnection handler
+	socket.on('disconnect', function() {
+		console.log('[SERVER] ' + socket.id + ' disconnected');
+		delete(clients[socket.id]);
+	});
 });
