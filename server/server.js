@@ -21,8 +21,13 @@ app.get("/index.html", function(req, res) {
 
 twitter_factory.init(twitter);
 
-// Socket listener
+var activeSocket = {};
+var streamLoop = undefined;
+
+// Socket connection listener
 io.sockets.on('connection', function (socket) {
+	activeSocket[socket.id] = socket;
+	console.log(activeSocket);
 	socket.on("twitter.query", function(query) {
 		var arr = [];
 		var twt = twitter_factory.create();
@@ -31,9 +36,22 @@ io.sockets.on('connection', function (socket) {
 			if(arr.length == 100) {
 				arr.shift();
 			}
-			setInterval(function() {
+			streamLoop = setInterval(function() {
 				io.emit('twitter.stream', arr);
 			}, 10000)
 		});
 	});
+	socket.on("ACK", function() {
+		/*var keys = Object.keys(activeSocket);
+		for(var i = 0; l = keys.length ; i < l; i++) {
+			if(keys[i] == socket.id) {
+
+			}
+		}*/
+	});
+});
+// Socket disconnection handler
+socket.on('disconnect', function() {
+	clearInterval(streamLoop);
+	socket.destroy();
 });
