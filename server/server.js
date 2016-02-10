@@ -42,16 +42,17 @@ io.sockets.on('connection', function (socket) {
 		});
 	});
 	socket.on("ACK", function() {
-		/*var keys = Object.keys(activeSocket);
-		for(var i = 0; l = keys.length ; i < l; i++) {
-			if(keys[i] == socket.id) {
-
-			}
-		}*/
 	});
 });
 // Socket disconnection handler
-socket.on('disconnect', function() {
+io.socket.on('disconnect', function(socket) {
 	clearInterval(streamLoop);
 	socket.destroy();
+	
+	var keys = Object.keys(activeSocket);
+	for(var i = 0; l = keys.length ; i < l; i++) {
+		if(keys[i] == socket.id) {
+			delete activeSocket[socket.id];
+		}
+	}
 });
