@@ -22,9 +22,10 @@ twitter_factory.init(twitter);
 
 // Socket listener
 io.sockets.on('connection', function (socket) {
-	socket.on("twitter.query", function(client) {
+	socket.on("twitter.query", function(query) {
 		var twt = twitter_factory.create();
-		twt.geoFetch(req.query.query, function(data) {
+		twt.geoFetch(query, function(data) {
+			console.log(data);
 			io.emit('twitter.stream', data);
 		});
 	});
