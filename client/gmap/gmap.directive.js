@@ -43,7 +43,8 @@ function gmap_directive() {
 						position: {
 							lat: lat,
 							lng: lng
-						}
+						},
+						icon: 'img/markers/earthquake-3.png'
 					});
 
 					marker.addListener('click', function() {
