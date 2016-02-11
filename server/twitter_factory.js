@@ -35,12 +35,12 @@ function twitter_service() {
 twitter_service.prototype = {
 	constructor: twitter_service,
 
-	geoFetch: function(query, callback) {
+	geoFetch: function(queries, callback) {
 		var self = this;
 		self.client.get(
 			'search/tweets', 
 			{
-				q: decodeURI(query),
+				q: decodeURI(queries.join(' OR ')),
 				count: 100
 			},
 
