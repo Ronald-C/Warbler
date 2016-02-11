@@ -14,6 +14,31 @@ function gmap_directive() {
 		});
 	}
 
+	function markerFactory(title, lat, lng, icon, info) {
+		var newMarker = new google.maps.Marker({
+			map: map,
+			draggable: false,
+			title: 'source: Twitter',
+
+			animation: google.maps.Animation.DROP,
+			position: {
+				lat: lat,
+				lng: lng
+			},
+			icon: icon
+		});
+
+		var infowindow = new google.maps.InfoWindow({
+			content: info
+		});
+
+		newMarker.addListener('click', function() {
+			infowindow.open(map, newMarker);
+		});
+
+		return newMarker;
+	}
+
 	/****** directive properties ********/
 	return {
 		scope: {
@@ -21,7 +46,7 @@ function gmap_directive() {
 		},
 		link: function($scope, $element, $attrs) {
 			map = new google.maps.Map($element[0], mapOptions);
-			
+
 			$scope.$watch('tweets', function(newData, oldData) {
 				clearMarkers(twitterMarkers);
 				angular.forEach(newData, function(tweet, index) {
@@ -30,29 +55,15 @@ function gmap_directive() {
 					var lng = tweet.coordinates[1];
 
 					var contentString = tweet.text;
-					var infowindow = new google.maps.InfoWindow({
-						content: contentString
-					});
+					var icon = 'img/markers/earthquake-3.png';
 
-					var marker = new google.maps.Marker({
-						map: map,
-						draggable: false,
-						title: 'source: Twitter',
+					var marker = markerFactory('source: Twitter', lat, lng, icon, contentString);
 
-						animation: google.maps.Animation.DROP,
-						position: {
-							lat: lat,
-							lng: lng
-						},
-						icon: 'img/markers/earthquake-3.png'
-					});
-
-					marker.addListener('click', function() {
-						infowindow.open(map, marker);
-					});
 
 					twitterMarkers.push(marker);
-				})
+				});
+
+				setTimeout(function() {$scope.$apply(), 300});
 			});
 		}
 	}
