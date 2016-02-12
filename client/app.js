@@ -2,19 +2,21 @@ var init = function() {
 	var app = angular.module('warbler', ['ngResource']);
 
 	app
-		.directive('gmap', [gmap_directive])
-		.directive('warblerSearch', [warblerSearch_directive]);
+		.service('twitterService', 
+			['$rootScope', twitter_service])
+		.service('hashtagifyService', 
+			['$resource', '$rootScope', hashtagify_service]);
 
 	app
-		.service('twitterService', 
-			['$resource', '$rootScope', twitter_service]);
+		.directive('gmap', [gmap_directive])
+		.directive('warblerSearch', 
+			['hashtagifyService', warblerSearch_directive]);
 
 	app
 		.controller('gmapController', 
 			['$scope', 'twitterService', gmap_controller])
 		.controller('wablerSearchController', 
 			['$scope', 'twitterService', wablerSearch_controller]);
-
 
 	angular.bootstrap(document, ['warbler']);
 };

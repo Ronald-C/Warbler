@@ -1,4 +1,4 @@
-function warblerSearch_directive() {
+function warblerSearch_directive(hashtagifyService) {
 
 	var suggestions = new Bloodhound({
 		datumTokenizer: Bloodhound.tokenizers.whitespace,
@@ -20,7 +20,8 @@ function warblerSearch_directive() {
 		templateUrl: 'search/warblerSearch.template.html',
 		link: function($scope, $element, $attrs) {
 			$element.find('form').on('submit', function(e) {
-				$scope.sendQuery();
+				console.log($scope.searchInput);
+				$scope.sendQuery($scope.searchInput);
 			});
 
 			$element.find('.inputSearch').typeahead({
@@ -86,7 +87,13 @@ function warblerSearch_directive() {
 					$scope.searchLog[query] = true;
 				}
 
-				$scope.$emit('warblerSearch.searchInput.submit', Object.keys($scope.searchLog));
+				var keywords = Object.keys($scope.searchLog);
+
+				if (keywords.length > 0) {
+					$scope.$emit('warblerSearch.searchInput.submit', keywords);
+				} else {
+					$scope.$emit('warblerSearch.searchLog.clear');
+				}
 			}
 		}]
 	}

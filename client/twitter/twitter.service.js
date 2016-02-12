@@ -1,4 +1,4 @@
-function twitter_service($resource, $rootScope) {
+function twitter_service($rootScope) {
 	var successCallback = null;
 	var failureCallback = null;
 
@@ -26,7 +26,7 @@ function twitter_service($resource, $rootScope) {
 			if (!socket) {
 				socket = io('http://warbler:80/');
 				self.data = [];
-				
+
 				socket
 					.on('connect_error', function() {
 						socket.disconnect();
