@@ -73,7 +73,7 @@ twitter_service.prototype = {
 			self.options,
 			function(error, tweets, response) {
 				if (error) {
-					//console.log(error);
+					console.log(error);
 					return {"ERROR": error};
 				}
 				var statuses = tweets.statuses;
@@ -93,6 +93,20 @@ twitter_service.prototype = {
 				callback(geos);
 			}
 		);
+	},
+
+	stopStream: function(state) {
+		var self = this;
+		if(state) {
+			self.stream = false;
+		}
+	},
+
+	resetStream: function(state) {
+		var self = this;
+		if(state) {
+			delete self.options.max_id;
+		}
 	}
 }
 /*************************** HELPER FUNCTIONS **************************/

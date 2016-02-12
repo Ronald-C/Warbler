@@ -32,14 +32,20 @@ io.sockets.on('connection', function(socket) {
 	} else {
 		console.log('[SERVER]: ' + socket.id + ' connected');
 		clients[socket.id] = socket;
+		socket = clients[socket.id]; 
 	}
 
-	// Client queries
+	// Search handler
 	socket.on("twitter.query", function(query) {
-		var twt = twitter_factory.create();
-		clients[socket.id].twt = twt;
+		if(socket.hasOwnProperty(twt)) {
+			// Clear twitter query if factory exists
+			socket.twt.stream = false;
+		} else {
+			var twt = twitter_factory.create();
+			socket.twt = twt;
+		}
 
-		clients[socket.id].twt.geoFetch(query, function(data) {
+		socket.twt.geoFetch(query, function(data) {
 			if(data.hasOwnProperty('ERROR')) {
 				socket.emit('ERROR', data['ERROR']);
 				socket.disconnect();
@@ -50,13 +56,15 @@ io.sockets.on('connection', function(socket) {
 	});
 
 	socket.on('twitter.stop', function() {
-		clients[socket.id].twt.stream = false;
+		console.log("[SERVER]: Clear query");
+		socket.twt.stopStream(true);
+		socket.twt.resetStream(true);
 	}); 
 
 	// Socket disconnection handler
 	socket.on('disconnect', function() {
 		console.log('[SERVER] ' + socket.id + ' disconnected');
-		clients[socket.id].twt.stream = false;
+		socket.twt.stopStream(true);
 		delete(clients[socket.id]);	
 	});
 });
