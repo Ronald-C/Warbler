@@ -11,7 +11,7 @@ var port = process.env.PORT || 80,
 	ip = process.env.IP;
 
 server.listen(port, ip);
-console.log("HTTP Servicing: " + ip + ':' + port);
+console.log("HTTP Servicing: " + (ip || 'localhost') + ':' + port);
 
 // Express deliver client UI
 app.use(express.static(__dirname + "/../client/"));
@@ -24,46 +24,46 @@ twitter_factory.init(twitter);
 var clients = {};
 
 // Socket connection listener
-io.sockets.on('connection', function(socket) {
+io.sockets.on('connection', function(socketInst) {
 	// Handle socket registration
-	if(clients.hasOwnProperty(socket.id)) {
-		console.log('[SERVER]: ' + socket.id + ' exists');
+	if(clients.hasOwnProperty(socketInst.id)) {
+		console.log('[SERVER]: ' + socketInst.id + ' exists');
 		return;
 	} else {
-		console.log('[SERVER]: ' + socket.id + ' connected');
-		clients[socket.id] = socket;
-		soc = clients[socket.id];
+		console.log('[SERVER]: ' + socketInst.id + ' connected');
+		clients[socketInst.id] = socketInst;
+		socket = clients[socketInst.id];
 	}
 
 	// Search handler
-	soc.on("twitter.query", function(query) {
-		if(soc.hasOwnProperty('twt')) {
+	socket.on("twitter.query", function(query) {
+		if(socket.hasOwnProperty('twt')) {
 			// Clear twitter query if factory exists
-			soc.twt.stopStream(true);
+			socket.twt.stopStream(true);
 		} else {
 			var twt = twitter_factory.create();
-			soc.twt = twt;
+			socket.twt = twt;
 		}
 
-		soc.twt.geoFetch(query, function(data) {
+		socket.twt.geoFetch(query, function(data) {
 			if(data.hasOwnProperty('ERROR')) {
-				soc.emit('ERROR', data['ERROR']);
-				soc.disconnect();
+				socket.emit('ERROR', data['ERROR']);
+				socket.disconnect();
 			} else {
-				soc.emit('twitter.stream', data);
+				socket.emit('twitter.stream', data);
 			} 
 		});
 	});
 
-	soc.on('twitter.stop', function() {
+	socket.on('twitter.stop', function() {
 		console.log("[SERVER]: Clear query");
-		soc.disconnect();
+		socket.disconnect();
 	}); 
 
 	// Socket disconnection handler
-	soc.on('disconnect', function() {
+	socket.on('disconnect', function() {
 		console.log('[SERVER] ' + socket.id + ' disconnected');
-		soc.twt.stopStream(true);
-		delete soc;	
+		socket.twt.stopStream(true);
+		delete socket;	
 	});
 });

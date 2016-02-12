@@ -53,7 +53,6 @@ twitter_service.prototype = {
 			self.stream = true;
 			var loop = setTimeout(function() {
 				if(self.stream) {
-					console.log("Looopings");
 					self.geoFetch(queries, callback);
 				} else {
 					clearTimeout(loop);
