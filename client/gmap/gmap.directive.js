@@ -48,7 +48,6 @@ function gmap_directive() {
 			map = new google.maps.Map($element[0], mapOptions);
 
 			$scope.$watch('tweets', function(newData, oldData) {
-				console.log(newData);
 				if (!oldData) oldData = [];
 				if (!newData) newData = [];
 				if (newData.length < oldData.length) {

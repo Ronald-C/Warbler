@@ -7,9 +7,14 @@ function twitter_service($resource, $rootScope) {
 	var service = {
 		data: null,
 		stop: function() {
+			var self = this;
 			if (!socket) return false;
 
 			socket.emit('twitter.stop');
+			self.data = [];
+			setTimeout(function() {
+				$rootScope.$broadcast('twitter.data.updated');
+			},300);
 		},
 
 		search: function(keywords, onSuccess, onFailure) {

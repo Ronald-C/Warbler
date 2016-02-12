@@ -71,7 +71,7 @@ function warblerSearch_directive() {
 			$scope.searchLog = {};
 			$scope.clear = function() {
 				$scope.searchLog = {};
-				$scope.$emit('warblerSearch.saerchLog.clear');
+				$scope.$emit('warblerSearch.searchLog.clear');
 			}
 
 			$scope.$on("status.waiting", function() {
