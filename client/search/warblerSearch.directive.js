@@ -64,13 +64,13 @@ function warblerSearch_directive(hashtagifyService) {
 			$scope.clear = function() {
 				$scope.searchLog = {};
 				$scope.$emit('warblerSearch.searchLog.clear');
+				$scope.searchInput = '';
+				setTimeout(function() { $scope.$apply(); }, 10);
 			}
 
 			$scope.$on("status.waiting", function() {
 				$scope.waiting = true;
-				setTimeout(function() {
-					$scope.$apply();
-				}, 10);
+				setTimeout(function() { $scope.$apply(); }, 10);
 			});
 
 			$scope.$on("status.ready", function() {
