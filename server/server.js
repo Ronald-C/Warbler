@@ -48,6 +48,7 @@ io.sockets.on('connection', function (socket) {
 	// Socket disconnection handler
 	socket.on('disconnect', function() {
 		console.log('[SERVER] ' + socket.id + ' disconnected');
+		clients[socket.id].twt.stream = false;
 		delete(clients[socket.id]);
 	
 		console.log(clients);
