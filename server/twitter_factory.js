@@ -30,15 +30,23 @@ var noop = function() {
 /**********RETURN AN INSTANCE OF THIS PROTOTYPE ON .create() **********/
 function twitter_service() {
 	this.client = new twitter(secrets);
+	this.options: {
+		q: null,
+		count: 100,
+		max_id: 0
+	};
 }
 
 twitter_service.prototype = {
 	constructor: twitter_service,
-
+	
 	geoFetch: function(queries, callback) {
 		var self = this;
 		
-		self.recurFetch(queries.join(' OR '), function(geos) {
+		var query = queries.join(' OR ');
+		self.options.q = query;
+
+		self.recurFetch(function(geos) {
 			console.log(geos);
 			(callback || noop)(geos);
 
@@ -51,24 +59,22 @@ twitter_service.prototype = {
 		return self;
 	},
 
-	recurFetch: function(query, callback) {
+	recurFetch: function(callback) {
 		var self = this;
-		var options = {
-			q: decodeURI(query),
-			count: 100
-		};
 
 		var geos = [];
 		self.client.get(
 			'search/tweets',
-			options,
+			self.options,
 			function(error, tweets, response) {
 				if (error) {
 					console.log(error);
 					return;
 				}
 				var statuses = tweets.statuses;
-				options.max_id = statuses[statuses.length - 1].id;
+				
+				var max_id = statuses[statuses.length - 1].id;
+				self.options.max_id = max_id;
 
 				for (var i = 0, l = statuses.length; i < l; i++) {
 					var o = statuses[i];
@@ -78,7 +84,6 @@ twitter_service.prototype = {
 						geos.push(twt);
 					}
 				}
-
 				callback(geos);
 			}
 		);
