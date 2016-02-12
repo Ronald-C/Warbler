@@ -32,7 +32,7 @@ function twitter_service() {
 	this.client = new twitter(secrets);
 	this.options = {
 		q: null,
-		count: 20
+		count: 100
 	};
 	this.stream = false;
 }
@@ -57,7 +57,7 @@ twitter_service.prototype = {
 				} else {
 					clearTimeout(loop);
 				}
-			}, 1000);	
+			}, 5000);	
 
 		});
 
@@ -73,8 +73,8 @@ twitter_service.prototype = {
 			self.options,
 			function(error, tweets, response) {
 				if (error) {
-					console.log(error);
-					return;
+					//console.log(error);
+					return {"ERROR": error};
 				}
 				var statuses = tweets.statuses;
 				

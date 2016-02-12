@@ -24,7 +24,7 @@ twitter_factory.init(twitter);
 var clients = {};
 
 // Socket connection listener
-io.sockets.on('connection', function (socket) {
+io.sockets.on('connection', function(socket) {
 	// Handle socket registration
 	if(clients.hasOwnProperty(socket.id)) {
 		console.log('[SERVER]: ' + socket.id + ' exists');
@@ -40,8 +40,12 @@ io.sockets.on('connection', function (socket) {
 		clients[socket.id].twt = twt;
 
 		clients[socket.id].twt.geoFetch(query, function(data) {
-			//console.log(data);
-			io.emit('twitter.stream', data);
+			if(data.hasOwnProperty('ERROR')) {
+				socket.emit('ERROR', data['ERROR']);
+				socket.disconnect();
+			} else {
+				socket.emit('twitter.stream', data);
+			} 
 		});
 	});
 
@@ -53,8 +57,6 @@ io.sockets.on('connection', function (socket) {
 	socket.on('disconnect', function() {
 		console.log('[SERVER] ' + socket.id + ' disconnected');
 		clients[socket.id].twt.stream = false;
-		delete(clients[socket.id]);
-	
-		console.log(clients);
+		delete(clients[socket.id]);	
 	});
 });
