@@ -37,6 +37,16 @@ function twitter_service($resource, $rootScope) {
 						console.log(err);
 						alert(err);
 					})
+					.on('ERROR', function(errors) {
+						if (angular.isArray(errors)) {
+							alert(errors[0].message);
+						} else {
+							alert(errors);
+						}
+
+						socket.disconnect();
+						socket = null;
+					})
 					.on('twitter.stream', function(response) {
 						if (angular.isArray(response)) {
 							angular.forEach(response, function(item, index) {
