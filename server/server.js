@@ -40,7 +40,7 @@ io.sockets.on('connection', function (socket) {
 		clients[socket.id].twt = twt;
 
 		clients[socket.id].twt.geoFetch(query, function(data) {
-			console.log(data);
+			//console.log(data);
 			io.emit('twitter.stream', data);
 		});
 	});

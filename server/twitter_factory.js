@@ -32,8 +32,7 @@ function twitter_service() {
 	this.client = new twitter(secrets);
 	this.options = {
 		q: null,
-		count: 100,
-		max_id: 0
+		count: 100
 	};
 	this.stream = false;
 }
@@ -58,7 +57,7 @@ twitter_service.prototype = {
 				} else {
 					clearTimeout(loop);
 				}
-			}, 5000);	
+			}, 3000);	
 
 		});
 
@@ -80,8 +79,9 @@ twitter_service.prototype = {
 				var statuses = tweets.statuses;
 				
 				var max_id = statuses[statuses.length - 1].id;
-				self.options.max_id = max_id;
-
+				if(!self.options.max_id || self.options.max_id != max_id) {
+					self.options.max_id = decBy1(max_id);
+				}
 				for (var i = 0, l = statuses.length; i < l; i++) {
 					var o = statuses[i];
 					if (o.geo) {
@@ -116,4 +116,5 @@ function trimLeft(s, c) {
 	while(i < s.length && s[i] === c) {
 		i++;
 	}
+	return s.substring(i);
 }
