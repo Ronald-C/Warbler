@@ -12,6 +12,8 @@ function twitter_service($resource, $rootScope) {
 			successCallback = onSuccess;
 			failureCallback = onFailure;
 
+			self.data = [];
+
 			if (!socket) {
 				socket = io('http://warbler:80/');
 
@@ -19,13 +21,17 @@ function twitter_service($resource, $rootScope) {
 					.on('connect_error', function() {
 						socket.disconnect();
 						socket = null;
-						
+
 						var err = 'Connection Error: Network or host is not available.';
 						console.log(err);
 						alert(err);
 					})
 					.on('twitter.stream', function(response) {
-						self.data = response;
+						if (angular.isArray(response)) {
+							angular.forEach(response, function(item, index) {
+								this.push(item);
+							}, self.data);
+						}
 						$rootScope.$broadcast('twitter.data.updated');
 						(successCallback || angular.noop)(response);
 					})

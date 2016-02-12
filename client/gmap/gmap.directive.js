@@ -48,7 +48,10 @@ function gmap_directive() {
 			map = new google.maps.Map($element[0], mapOptions);
 
 			$scope.$watch('tweets', function(newData, oldData) {
-				clearMarkers(twitterMarkers);
+				if (angular.isArray(newData) && newData.length === 0) {
+					clearMarkers(twitterMarkers);
+				}
+				
 				angular.forEach(newData, function(tweet, index) {
 					if (!tweet.coordinates) return false;
 					var lat = tweet.coordinates[0];
