@@ -46,6 +46,9 @@ io.sockets.on('connection', function(socketInst) {
 		}
 
 		socket.twt.geoFetch(query, function(data) {
+			if(!socket) {
+				return;
+			}
 			if(data.hasOwnProperty('ERROR')) {
 				socket.emit('ERROR', data['ERROR']);
 				socket.disconnect();
