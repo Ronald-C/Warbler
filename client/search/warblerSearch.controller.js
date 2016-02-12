@@ -5,4 +5,8 @@ function wablerSearch_controller($scope, twitterService) {
 			$scope.$broadcast("status.ready");
 		});
 	});
+
+	$scope.$on('warblerSearch.searchLog.clear', function(evt, data) {
+		twitterService.stop();
+	});
 }

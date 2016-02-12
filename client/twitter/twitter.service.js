@@ -6,6 +6,12 @@ function twitter_service($resource, $rootScope) {
 
 	var service = {
 		data: null,
+		stop: function() {
+			if (!socket) return false;
+
+			socket.emit('twitter.stop');
+		},
+
 		search: function(keywords, onSuccess, onFailure) {
 			var self = this;
 
@@ -33,7 +39,7 @@ function twitter_service($resource, $rootScope) {
 							}, self.data);
 						}
 						$rootScope.$broadcast('twitter.data.updated');
-						
+
 						(successCallback || angular.noop)(response);
 					})
 					.on('disconnect', function() {

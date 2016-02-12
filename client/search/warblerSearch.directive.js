@@ -9,7 +9,7 @@ function warblerSearch_directive() {
 	function fetchSuggestions(q, sync) {
 		if (q === '') {
 			sync(suggestions.get(
-				'earthquake', 'tornadoes', 'storm', 'snow', 'traffic'
+				'earthquake', 'tornadoes', 'storm', 'traffic'
 			));
 		} else {
 			suggestions.search(q, sync);
@@ -71,6 +71,7 @@ function warblerSearch_directive() {
 			$scope.searchLog = {};
 			$scope.clear = function() {
 				$scope.searchLog = {};
+				$scope.$emit('warblerSearch.saerchLog.clear');
 			}
 
 			$scope.$on("status.waiting", function() {
