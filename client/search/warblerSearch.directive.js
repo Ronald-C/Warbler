@@ -67,10 +67,21 @@ function warblerSearch_directive() {
 		},
 
 		controller: ['$scope', function($scope) {
+			$scope.waiting = false;
 			$scope.searchLog = {};
 			$scope.clear = function() {
 				$scope.searchLog = {};
 			}
+
+			$scope.$on("status.waiting", function() {
+				$scope.waiting = true;
+				$scope.$apply();
+			});
+
+			$scope.$on("status.ready", function() {
+				$scope.waiting = false;
+				$scope.$apply();
+			});
 		}]
 	}
 }

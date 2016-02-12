@@ -27,10 +27,15 @@
 					</ul>
 				</span>
 
-				<input type="text" style="height:33px;" class="form-control inputSearch" ng-model="searchInput" placeholder="Ask Warbler about an Event" />
-				
+				<input type="text" style="height:33px;" class="form-control inputSearch" placeholder="Ask Warbler about an Event"
+					ng-model="searchInput"
+					ng-disabled="waiting" />
+
 				<span class="input-group-btn">
-					<button type="submit" class="btn btn-primary btnSearch"><i class="glyphicon glyphicon-search"></i></button>
+					<button type="submit" class="btn btn-primary btnSearch"
+						ng-disabled="waiting">
+							<i ng-class="{ 'glyphicon glyphicon-search': !waiting, 'fa fa-spin fa-spinner': waiting }"></i>
+					</button>
 				</span>
 			</div>
 		</div>
