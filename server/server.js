@@ -45,6 +45,10 @@ io.sockets.on('connection', function (socket) {
 		});
 	});
 
+	socket.on('twitter.stop', function() {
+		clients[socket.id].twt.stream = false;
+	}); 
+
 	// Socket disconnection handler
 	socket.on('disconnect', function() {
 		console.log('[SERVER] ' + socket.id + ' disconnected');

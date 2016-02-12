@@ -32,7 +32,7 @@ function twitter_service() {
 	this.client = new twitter(secrets);
 	this.options = {
 		q: null,
-		count: 100
+		count: 20
 	};
 	this.stream = false;
 }
@@ -57,7 +57,7 @@ twitter_service.prototype = {
 				} else {
 					clearTimeout(loop);
 				}
-			}, 3000);	
+			}, 1000);	
 
 		});
 
@@ -95,7 +95,7 @@ twitter_service.prototype = {
 		);
 	}
 }
-/****************************** HANDLERS *****************************/
+/*************************** HELPER FUNCTIONS **************************/
 function decBy1(n) {
 	// Cast to a string; JS limited by 53bit
 	n = n.toString();
