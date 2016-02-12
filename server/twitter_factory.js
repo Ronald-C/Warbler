@@ -30,40 +30,84 @@ var noop = function() {
 /**********RETURN AN INSTANCE OF THIS PROTOTYPE ON .create() **********/
 function twitter_service() {
 	this.client = new twitter(secrets);
+	this.options: {
+		q: null,
+		count: 100,
+		max_id: 0
+	};
 }
 
 twitter_service.prototype = {
 	constructor: twitter_service,
-
+	
 	geoFetch: function(queries, callback) {
 		var self = this;
-		self.client.get(
-			'search/tweets', 
-			{
-				q: decodeURI(queries.join(' OR ')),
-				count: 100
-			},
+		
+		var query = queries.join(' OR ');
+		self.options.q = query;
 
-			function(error, tweets, response) {
-			if (error) {
-				console.log(error);
-				return;
-			}
-
-			var statuses = tweets.statuses;
-			var geos = [];
-			for (var i = 0, l = statuses.length; i < l; i++) {
-				var o = statuses[i];
-				if (o.geo) {
-					var twt = o.geo;
-					twt.text = o.text;
-					geos.push(twt);
-				}
-			}
-
+		self.recurFetch(function(geos) {
+			console.log(geos);
 			(callback || noop)(geos);
+
+			setTimeout(function() {
+				self.geoFetch(queries, callback);
+			}, 5000);	
+
 		});
 
 		return self;
+	},
+
+	recurFetch: function(callback) {
+		var self = this;
+
+		var geos = [];
+		self.client.get(
+			'search/tweets',
+			self.options,
+			function(error, tweets, response) {
+				if (error) {
+					console.log(error);
+					return;
+				}
+				var statuses = tweets.statuses;
+				
+				var max_id = statuses[statuses.length - 1].id;
+				self.options.max_id = max_id;
+
+				for (var i = 0, l = statuses.length; i < l; i++) {
+					var o = statuses[i];
+					if (o.geo) {
+						var twt = o.geo;
+						twt.text = o.text;
+						geos.push(twt);
+					}
+				}
+				callback(geos);
+			}
+		);
+	}
+}
+/****************************** HANDLERS *****************************/
+function decBy1(n) {
+	// Cast to a string; JS limited by 53bit
+	n = n.toString();
+	var allButLast = n.substr(0, n.length - 1);
+	var lastNum = n.substr(n.length - 1);
+
+	if(lastNum == "0") {
+		return decBy1(allButLast) + "9";
+	} else {
+		var result = allButLast + (parseInt(lastNum, 10) - 1).toString();
+		return trimLeft(result, "0");
+	}
+}
+
+function trimLeft(s, c) {
+	var i = 0;
+	// Remove leading "0"
+	while(i < s.length && s[i] === c) {
+		i++;
 	}
 }
