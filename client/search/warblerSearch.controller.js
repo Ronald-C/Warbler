@@ -1,7 +1,7 @@
 function wablerSearch_controller($scope, twitterService) {
-	$scope.$on('warblerSearch.searchInput.submit', function(evt, data) {
+	$scope.$on('warblerSearch.searchInput.submit', function(evt, keywords) {
 		$scope.$broadcast("status.waiting");
-		twitterService.search(data, function() {
+		twitterService.search(keywords, function() {
 			$scope.$broadcast("status.ready");
 		});
 	});

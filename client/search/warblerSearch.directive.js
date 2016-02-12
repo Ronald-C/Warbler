@@ -19,17 +19,8 @@ function warblerSearch_directive() {
 	return {
 		templateUrl: 'search/warblerSearch.template.html',
 		link: function($scope, $element, $attrs) {
-			function intentSubmission(query) {
-				if (query) $scope.searchInput = query;
-				if (!$scope.searchLog.hasOwnProperty(query) && typeof query !== 'undefined') {
-					$scope.searchLog[query] = true;
-				}
-
-				$scope.$emit('warblerSearch.searchInput.submit', Object.keys($scope.searchLog));
-			}
-
 			$element.find('form').on('submit', function(e) {
-				intentSubmission();
+				$scope.sendQuery();
 			});
 
 			$element.find('.inputSearch').typeahead({
@@ -58,7 +49,7 @@ function warblerSearch_directive() {
 					$(this).select();
 				})
 				.bind('typeahead:select', function(e, sugg) {
-					intentSubmission(sugg);
+					$scope.sendQuery(sugg);
 				});
 
 			$element.find('#searchLog .dropdown-menu').on('click', function(e) {
@@ -76,13 +67,27 @@ function warblerSearch_directive() {
 
 			$scope.$on("status.waiting", function() {
 				$scope.waiting = true;
-				$scope.$apply();
+				setTimeout(function() {
+					$scope.$apply();
+				}, 10);
 			});
 
 			$scope.$on("status.ready", function() {
 				$scope.waiting = false;
-				$scope.$apply();
+
+				setTimeout(function() {
+					$scope.$apply();
+				},10);
 			});
+
+			$scope.sendQuery = function(query) {
+				if (query) $scope.searchInput = query;
+				if (!$scope.searchLog.hasOwnProperty(query) && typeof query !== 'undefined') {
+					$scope.searchLog[query] = true;
+				}
+
+				$scope.$emit('warblerSearch.searchInput.submit', Object.keys($scope.searchLog));
+			}
 		}]
 	}
 }

@@ -23,11 +23,10 @@ function twitter_service($resource, $rootScope) {
 			successCallback = onSuccess;
 			failureCallback = onFailure;
 
-			self.data = [];
-
 			if (!socket) {
 				socket = io('http://warbler:80/');
-
+				self.data = [];
+				
 				socket
 					.on('connect_error', function() {
 						socket.disconnect();
