@@ -53,6 +53,7 @@ twitter_service.prototype = {
 			self.stream = true;
 			var loop = setTimeout(function() {
 				if(self.stream) {
+					console.log("Looopings");
 					self.geoFetch(queries, callback);
 				} else {
 					clearTimeout(loop);
@@ -73,7 +74,6 @@ twitter_service.prototype = {
 			self.options,
 			function(error, tweets, response) {
 				if (error) {
-					console.log(error);
 					return {"ERROR": error};
 				}
 				var statuses = tweets.statuses;
@@ -100,14 +100,8 @@ twitter_service.prototype = {
 		if(state) {
 			self.stream = false;
 		}
-	},
-
-	resetStream: function(state) {
-		var self = this;
-		if(state) {
-			delete self.options.max_id;
-		}
 	}
+	
 }
 /*************************** HELPER FUNCTIONS **************************/
 function decBy1(n) {
