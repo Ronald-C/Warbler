@@ -80,7 +80,7 @@ twitter_service.prototype = {
 				var statuses = tweets.statuses;
 				
 				var max_id = statuses[statuses.length - 1].id;
-				self.options.max_id = decBy1(max_id);
+				self.options.max_id = max_id;
 
 				for (var i = 0, l = statuses.length; i < l; i++) {
 					var o = statuses[i];
