@@ -48,11 +48,16 @@ function gmap_directive() {
 			map = new google.maps.Map($element[0], mapOptions);
 
 			$scope.$watch('tweets', function(newData, oldData) {
-				if (angular.isArray(newData) && newData.length === 0) {
+				console.log(newData);
+				if (!oldData) oldData = [];
+				if (!newData) newData = [];
+				if (newData.length < oldData.length) {
 					clearMarkers(twitterMarkers);
 				}
 				
-				angular.forEach(newData, function(tweet, index) {
+				for (var i = oldData.length, l = newData.length; i < l; i++) {
+					var tweet = newData[i];
+
 					if (!tweet.coordinates) return false;
 					var lat = tweet.coordinates[0];
 					var lng = tweet.coordinates[1];
@@ -62,12 +67,11 @@ function gmap_directive() {
 
 					var marker = markerFactory('source: Twitter', lat, lng, icon, contentString);
 
-
 					twitterMarkers.push(marker);
-				});
+				}
 
 				setTimeout(function() {$scope.$apply(), 300});
-			});
+			}, true);
 		}
 	}
 }

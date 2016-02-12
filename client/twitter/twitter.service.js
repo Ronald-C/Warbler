@@ -33,6 +33,7 @@ function twitter_service($resource, $rootScope) {
 							}, self.data);
 						}
 						$rootScope.$broadcast('twitter.data.updated');
+						
 						(successCallback || angular.noop)(response);
 					})
 					.on('disconnect', function() {
