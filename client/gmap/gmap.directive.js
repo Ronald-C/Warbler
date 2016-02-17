@@ -39,6 +39,7 @@ function gmap_directive() {
 		return newMarker;
 	}
 
+
 	/****** directive properties ********/
 	return {
 		scope: {
@@ -53,7 +54,8 @@ function gmap_directive() {
 				if (newData.length < oldData.length) {
 					clearMarkers(twitterMarkers);
 				}
-				
+
+				var heatmapData = [];
 				for (var i = oldData.length, l = newData.length; i < l; i++) {
 					var tweet = newData[i];
 
@@ -67,9 +69,20 @@ function gmap_directive() {
 					var marker = markerFactory('source: Twitter', lat, lng, icon, contentString);
 
 					twitterMarkers.push(marker);
+
+					var latLng = new google.maps.LatLng(lat, lng);
+					heatmapData.push(latLng);
 				}
 
-				setTimeout(function() {$scope.$apply(), 300});
+				var heatmap = new google.maps.visualization.HeatmapLayer({
+					data: heatmapData,
+					dissipating: false,
+					map: map
+				});
+
+				setTimeout(function() {
+					$scope.$apply(), 300
+				});
 			}, true);
 		}
 	}
