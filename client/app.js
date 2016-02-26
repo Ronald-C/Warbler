@@ -22,6 +22,8 @@ var init = function() {
 	});
 
 	$(window).resize(function() {
+		var h = $(window).height()
+
 		$('#gmap').css('height', (h - offsetTop));
 	}).resize();
 };
