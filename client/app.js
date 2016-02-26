@@ -20,4 +20,8 @@ var init = function() {
 		$("#sidebar-wrapper").toggleClass("toggled");
 		$(this).find('i').toggleClass('fa-bars fa-ellipsis-v')
 	});
+
+	$(window).resize(function() {
+		$('#gmap').css('height', (h - offsetTop));
+	}).resize();
 };
