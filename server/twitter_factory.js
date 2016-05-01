@@ -13,8 +13,9 @@ module.exports = {
 	}
 }
 /***************************** PRIVATE ******************************/
-var fs = require('fs');
-var contents = fs.readFileSync('../security/config.json');
+var fs = require('fs'),
+	path = require("path");
+var contents = fs.readFileSync(path.join(__dirname, '../security/config.json'));
 var jsonContents = JSON.parse(contents);
 
 var twitter = null;
@@ -28,7 +29,7 @@ var secrets = {
 
 	access_token_key: (jsonContents.TWITTER_ACCESS_TOKEN_KEY != '') ? 
 		jsonContents.TWITTER_ACCESS_TOKEN_KEY : process.env.TWITTER_ACCESS_TOKEN_KEY,
-		
+
 	access_token_secret: (jsonContents.TWITTER_ACCESS_TOKEN_SECRET != '') 
 		? jsonContents.TWITTER_ACCESS_TOKEN_SECRET : process.env.TWITTER_ACCESS_TOKEN_SECRET
 };
