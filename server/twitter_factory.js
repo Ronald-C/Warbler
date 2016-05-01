@@ -13,13 +13,24 @@ module.exports = {
 	}
 }
 /***************************** PRIVATE ******************************/
+var fs = require('fs');
+var contents = fs.readFileSync('../security/config.json');
+var jsonContents = JSON.parse(contents);
+
 var twitter = null;
 
 var secrets = {
-	consumer_key: process.env.TWITTER_CONSUMER_KEY,
-	consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-	access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
-	access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+	consumer_key: (jsonContents.TWITTER_CONSUMER_KEY != '') 
+		? jsonContents.TWITTER_CONSUMER_KEY : process.env.TWITTER_CONSUMER_KEY,
+
+	consumer_secret: (jsonContents.TWITTER_CONSUMER_SECRET != '') 
+		? jsonContents.TWITTER_CONSUMER_SECRET : process.env.TWITTER_CONSUMER_SECRET,
+
+	access_token_key: (jsonContents.TWITTER_ACCESS_TOKEN_KEY != '') ? 
+		jsonContents.TWITTER_ACCESS_TOKEN_KEY : process.env.TWITTER_ACCESS_TOKEN_KEY,
+		
+	access_token_secret: (jsonContents.TWITTER_ACCESS_TOKEN_SECRET != '') 
+		? jsonContents.TWITTER_ACCESS_TOKEN_SECRET : process.env.TWITTER_ACCESS_TOKEN_SECRET
 };
 
 var noop = function() {
