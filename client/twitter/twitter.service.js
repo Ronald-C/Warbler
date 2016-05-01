@@ -24,7 +24,7 @@ function twitter_service($rootScope) {
 			failureCallback = onFailure;
 
 			if (!socket) {
-				socket = io('http://warbler:80/');
+				socket = io('/');
 				self.data = [];
 
 				socket
