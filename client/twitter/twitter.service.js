@@ -1,4 +1,4 @@
-function twitter_service($rootScope) {
+module.exports = function($rootScope) {
 	var successCallback = null;
 	var failureCallback = null;
 
