@@ -18,5 +18,12 @@
     "path": "~0.12.7",
     "twitter": "~1.2.5",
     "mongodb": "~2.1.6"
+  },
+  "devDependencies": {
+    "grunt": "latest",
+    "grunt-browserify": "~5.0.0",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-contrib-copy": "latest"
   }
 }

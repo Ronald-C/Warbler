@@ -1,10 +1,3 @@
-function gmap_controller($scope, twitterService) {
-	$scope.tweets = twitterService.data;
+module.exports = function($scope, model) {
 
-	$scope.$on('twitter.data.updated', function() {
-		$scope.tweets = twitterService.data;
-		setTimeout(function() {
-			$scope.$apply();
-		},10);
-	});
 }

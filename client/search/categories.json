@@ -1,0 +1,40 @@
+[
+    { 
+        "category": "Events",
+        "icon": "fa fa-exclamation-triangle",
+        "topics": [
+            {
+                "label": "Earthquake",
+                "topic": "TweetEarthQuake",
+                "selected": false
+            },
+            {
+                "label": "Traffic",
+                "topic": "TweetTraffic",
+                "selected": false
+            }
+        ]
+    },
+    {
+        "category": "Election",
+        "icon": "fa fa-users",
+        "topics": [
+            {
+                "label": "Bernie Sanders",
+                "topic": "TweetBernieSanders",
+                "selected": false
+            },
+            {
+                "label": "Hillary Clinton",
+                "topic": "TweetHillaryClinton",
+                "selected": false
+            },
+            {
+                "label": "Donald Trump",
+                "topic": "TweetDonaldTrump",
+                "selected": false
+            }
+        ]
+    }
+]
+
