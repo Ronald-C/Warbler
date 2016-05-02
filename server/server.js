@@ -5,8 +5,27 @@ var express = require("express"),
 	io = require("socket.io")(server),
 	path = require("path"),
 	twitter = require("twitter"),
-	twitter_factory = require('./twitter_factory.js'); 
-	
+	twitter_factory = require('./twitter_factory.js'),
+	Firebase = require('firebase'); 
+
+var firebase = new Firebase('http://blistering-inferno-5589.firebaseIO.com');
+var references = {
+	'earthquake': firebase.child('TweetEarthquake'),
+	'traffic': firebase.child('TweetTraffic'),
+	'HillaryClinton': firebase.child('TweetHillaryClinton'),
+	'BernieSanders': firebase.child('TweetBernieSanders'),
+	'DonaldTrump': firebase.child('TweetBernieSanders')
+}
+
+var hashtags = {
+	'earthquake': [
+		'#earthquake', '#earthquakes'	
+	],
+	'traffic': [
+		'#accident', '#traffic'
+	],
+}
+
 var port = process.env.PORT || 80,
 	ip = process.env.IP;
 
@@ -19,9 +38,55 @@ app.get("/index.html", function(req, res) {
 	res.sendFile(path.join(__dirname, "../client/", "index.html"));
 });
 
-twitter_factory.init(twitter);
+var generator = function(obj) {
+    var hashKeys = Object.keys(obj);
+    var index = 0;
 
-var clients = {};
+    return {
+       next: function() {
+           if (index > hashKeys.length - 1) {
+           		index = 0;
+           }
+
+           return hashKeys[index];
+       }
+    }
+}
+var it = generator(hashtags);
+
+// Create the factor and set to loop
+twitter_factory.init(twitter);
+	
+var twt = twitter_factory.create();
+
+var loop = setInterval(function(query_key) {
+	var queryArray = hashtags[query_key];
+
+	twt.geoFetch(queryArray, function(geos) {
+
+		if(references.hasOwnProperty(query_key)) {
+			var firebase_ref = references[query_key];
+		
+		} else {
+			console.log("[WARNING] No Firebase reference for " + query_key);
+		}
+
+		for(var i = 0; i < geos.length; i++) {
+			var single = geos[i];
+
+			firebase_ref.push({
+				'GeoLocation': single.geo,
+				'Message': single.text,
+				'Timestamp': single.created_at,
+				'TweetId': single.id_str
+			});
+		}
+
+	}, 10)	// Number iterations
+
+}, 60000, it.next() )	
+
+/*var clients = {};
 
 // Socket connection listener
 io.sockets.on('connection', function(socketInst) {
@@ -69,4 +134,4 @@ io.sockets.on('connection', function(socketInst) {
 		socket.twt.stopStream(true);
 		delete socket;	
 	});
-});
+});*/

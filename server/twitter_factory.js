@@ -43,33 +43,38 @@ var noop = function() {
 function twitter_service() {
 	this.client = new twitter(secrets);
 	this.options = {
-		q: null,
-		count: 100
+		'q': null,
+		'count': 100
 	};
-	this.stream = false;
+	this.iterations = 1;
 }
 
 twitter_service.prototype = {
 	constructor: twitter_service,
 	
-	geoFetch: function(queries, callback) {
+	geoFetch: function(queries, callback, iterations) {
 		var self = this;
-		
+		self.iterations = iterations;
+
 		var query = queries.join(' OR ');
 		self.options.q = query;
 
 		var loop = undefined;
+		
 		self.recurFetch(function(geos) {
+			self.iterations = self.iterations - 1; 
+			
 			(callback || noop)(geos);
 
-			self.stream = true;
 			var loop = setTimeout(function() {
-				if(self.stream) {
-					self.geoFetch(queries, callback);
+				if(iterations > 0 ) {
+					self.geoFetch(queries, callback, self.iterations);
+			
 				} else {
 					clearTimeout(loop);
 				}
-			}, 5000);	
+
+			}, 5000);	// Every 5 seconds
 
 		});
 
@@ -80,42 +85,42 @@ twitter_service.prototype = {
 		var self = this;
 
 		var geos = [];
+
 		self.client.get(
 			'search/tweets',
 			self.options,
+
 			function(error, tweets, response) {
 				if (error) {
 					return {"ERROR": error};
 				}
+
 				var statuses = tweets.statuses;
+				var since_id = statuses[statuses.length - 1].id;
+
+				self.options.since_id = since_id;
 				
-				var max_id = statuses[statuses.length - 1].id;
-				if(!self.options.max_id || self.options.max_id != max_id) {
-					self.options.max_id = decBy1(max_id);
-				}
 				for (var i = 0, l = statuses.length; i < l; i++) {
 					var o = statuses[i];
 					if (o.geo) {
 						var twt = o.geo;
+						
 						twt.text = o.text;
+						twt.id_str = o.id_str;
+						twt.created_at = o.created_at;
+
 						geos.push(twt);
 					}
 				}
 				callback(geos);
 			}
 		);
-	},
-
-	stopStream: function(state) {
-		var self = this;
-		if(state) {
-			self.stream = false;
-		}
 	}
+
 	
 }
 /*************************** HELPER FUNCTIONS **************************/
-function decBy1(n) {
+/*function decBy1(n) {
 	// Cast to a string; JS limited by 53bit
 	n = n.toString();
 	var allButLast = n.substr(0, n.length - 1);
@@ -136,4 +141,4 @@ function trimLeft(s, c) {
 		i++;
 	}
 	return s.substring(i);
-}
+}*/
