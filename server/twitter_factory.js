@@ -5,7 +5,7 @@ module.exports = {
 	create: function() {
 		var self = this;
 		if (!twitter) {
-			console.log("Must import twitter module and pass it into init function of twitter_factory.");
+			console.log("[WARNING] Must import twitter module and pass it into init function of twitter_factory.");
 			return false;
 		}		
 
@@ -60,21 +60,24 @@ twitter_service.prototype = {
 		self.options.q = query;
 
 		var loop = undefined;
-		
+
 		self.recurFetch(function(geos) {
 			self.iterations = self.iterations - 1; 
 			
 			(callback || noop)(geos);
 
-			var loop = setTimeout(function() {
-				if(iterations > 0 ) {
-					self.geoFetch(queries, callback, self.iterations);
-			
-				} else {
-					clearTimeout(loop);
-				}
+			if(self.iterations > 0) {
+				var loop = setTimeout(function() {				
 
-			}, 5000);	// Every 5 seconds
+					if(self.iterations > 0 ) {
+						self.geoFetch(queries, callback, self.iterations);
+				
+					} else {
+						clearTimeout(loop);
+					}
+
+				}, 5000);	// Every 5 seconds
+			}
 
 		});
 
@@ -92,26 +95,31 @@ twitter_service.prototype = {
 
 			function(error, tweets, response) {
 				if (error) {
+					console.log(error)
 					return {"ERROR": error};
 				}
 
 				var statuses = tweets.statuses;
-				var since_id = statuses[statuses.length - 1].id;
+				if(statuses.length > 0) {
+					var since_id = statuses[statuses.length - 1].id;
 
-				self.options.since_id = since_id;
-				
-				for (var i = 0, l = statuses.length; i < l; i++) {
-					var o = statuses[i];
-					if (o.geo) {
-						var twt = o.geo;
-						
-						twt.text = o.text;
-						twt.id_str = o.id_str;
-						twt.created_at = o.created_at;
+					self.options.since_id = since_id;
 
-						geos.push(twt);
+					for (var i = 0, l = statuses.length; i < l; i++) {
+						var o = statuses[i];
+						if (o.geo) {
+							var twt = o.geo;
+
+							twt.text = o.text;
+							twt.id_str = o.id_str;
+							twt.created_at = o.created_at;
+
+							geos.push(twt);
+						}
 					}
+					
 				}
+				
 				callback(geos);
 			}
 		);

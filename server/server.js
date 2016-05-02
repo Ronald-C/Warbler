@@ -14,7 +14,7 @@ var references = {
 	'traffic': firebase.child('TweetTraffic'),
 	'HillaryClinton': firebase.child('TweetHillaryClinton'),
 	'BernieSanders': firebase.child('TweetBernieSanders'),
-	'DonaldTrump': firebase.child('TweetBernieSanders')
+	'DonaldTrump': firebase.child('TweetDonaldTrump')
 }
 
 var hashtags = {
@@ -23,6 +23,15 @@ var hashtags = {
 	],
 	'traffic': [
 		'#accident', '#traffic'
+	],
+	'HillaryClinton': [
+		'#HillaryClinton', '#Hillary2016'
+	],
+	'BernieSanders': [
+		'#bernie', '#FeelTheBern'
+	],
+	'DonaldTrump': [
+		'#trump', '#donaldtrump', '#trump2016', '#trumptrain', '#DonaldTrump'
 	],
 }
 
@@ -40,12 +49,15 @@ app.get("/index.html", function(req, res) {
 
 var generator = function(obj) {
     var hashKeys = Object.keys(obj);
-    var index = 0;
+    var index = -1;
 
     return {
        next: function() {
-           if (index > hashKeys.length - 1) {
+           if (index >= hashKeys.length - 1) {
            		index = 0;
+           
+           } else {
+        		index = index + 1;
            }
 
            return hashKeys[index];
@@ -56,12 +68,13 @@ var it = generator(hashtags);
 
 // Create the factor and set to loop
 twitter_factory.init(twitter);
-	
+
 var twt = twitter_factory.create();
+var getTweets = function(getKey_fun) {
+	var query_key = getKey_fun();
+	console.log("Querying " + query_key);
 
-var loop = setInterval(function(query_key) {
 	var queryArray = hashtags[query_key];
-
 	twt.geoFetch(queryArray, function(geos) {
 
 		if(references.hasOwnProperty(query_key)) {
@@ -73,18 +86,20 @@ var loop = setInterval(function(query_key) {
 
 		for(var i = 0; i < geos.length; i++) {
 			var single = geos[i];
-
-			firebase_ref.push({
-				'GeoLocation': single.geo,
+			
+			var ref = new Firebase(firebase_ref + '/' + single.id_str);
+			ref.set({
+				'GeoLocation': single.coordinates,
 				'Message': single.text,
 				'Timestamp': single.created_at,
-				'TweetId': single.id_str
 			});
 		}
 
-	}, 10)	// Number iterations
+	}, 3)	// Number iterations
+}
 
-}, 60000, it.next() )	
+getTweets(it.next);	// Initial call before setInterval
+var loop = setInterval(getTweets, 10000, it.next );	
 
 /*var clients = {};
 
