@@ -8,13 +8,18 @@ var express = require("express"),
 	twitter_factory = require('./twitter_factory.js'),
 	Firebase = require('firebase'); 
 
-var firebase = new Firebase('http://blistering-inferno-5589.firebaseIO.com');
+var fb = process.env.FIREBASE || '';
+if(fb == '') {
+	throw "Unknown Firebase instance";
+}
+
+var firebase = new Firebase(fb);
 var references = {
-	'earthquake': firebase.child('TweetEarthquake'),
-	'traffic': firebase.child('TweetTraffic'),
-	'HillaryClinton': firebase.child('TweetHillaryClinton'),
-	'BernieSanders': firebase.child('TweetBernieSanders'),
-	'DonaldTrump': firebase.child('TweetDonaldTrump')
+	'earthquake': 'TweetEarthquake',
+	'traffic': 'TweetTraffic',
+	'HillaryClinton': 'TweetHillaryClinton',
+	'BernieSanders': 'TweetBernieSanders',
+	'DonaldTrump': 'TweetDonaldTrump'
 }
 
 var hashtags = {
