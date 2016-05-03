@@ -36,7 +36,7 @@ var hashtags = {
 }
 
 var port = process.env.PORT || 8080,
-	ip = process.env.IP;
+	ip = process.env.IP || '0.0.0.0';
 
 server.listen(port, ip);
 console.log("HTTP Servicing: " + (ip || 'localhost') + ':' + port);
