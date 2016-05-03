@@ -18,22 +18,23 @@ var references = {
 }
 
 var hashtags = {
-	'earthquake': [
+	'BernieSanders': [
+		'#bernie', '#FeelTheBern', 'BernieSanders', 'Bernie Sanders', 'Bernie'
+	],
+        'HillaryClinton': [
+		'#HillaryClinton', '#Hillary2016', 'HillaryClinton', 'Hillary'
+	],
+        'DonaldTrump': [
+		'#trump', '#donaldtrump', '#trump2016', '#trumptrain', '#DonaldTrump'
+	],
+        'earthquake': [
 		'#earthquake', '#earthquakes'	
 	],
 	'traffic': [
-		'#accident', '#traffic'
-	],
-	'HillaryClinton': [
-		'#HillaryClinton', '#Hillary2016'
-	],
-	'BernieSanders': [
-		'#bernie', '#FeelTheBern'
-	],
-	'DonaldTrump': [
-		'#trump', '#donaldtrump', '#trump2016', '#trumptrain', '#DonaldTrump'
-	],
-}
+		'#accident', '#traffic', 'traffic', 'accident'
+	]	
+	
+	}
 
 var port = process.env.PORT || 80,
 	ip = process.env.IP;

@@ -1,4 +1,4 @@
-module.exports = function($resource, $rootScope) {
+module.exports = function($resource, $rootScope, $filter) {
     var db = new Firebase("https://blistering-inferno-5589.firebaseio.com");
 
     var model = {
@@ -14,7 +14,7 @@ module.exports = function($resource, $rootScope) {
     }
 
     angular.forEach(references, function(ref, topic) {
-        ref.orderByChild("Timestamp").limitToLast(1000);
+        //ref.orderByChild("Timestamp").limitToLast(1000);
     });
 
     var initialize = function() {
@@ -25,6 +25,9 @@ module.exports = function($resource, $rootScope) {
 
                 references[topic.topic].once('value', function(snapshot) {
                     angular.extend(model[topic.topic], snapshot.val());
+                    angular.forEach(model[topic.topic], function(tweet, tweetId) {
+                        tweet.Timestamp = $filter('date')(new Date(tweet.Timestamp), 'MM/dd/yyyy hh:mm');
+                    });
                     $rootScope.$broadcast('model.' + topic.topic + '.updated');
                 });
 
