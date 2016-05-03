@@ -10,7 +10,7 @@ window.initWarbler = function() {
     var app = angular.module('warbler', ['ngResource']);
 
     app
-        .service('warbler_model_service', ['$rootScope', model_service])
+        .service('warbler_model_service', ['$resource', '$rootScope', model_service])
     ;
 
     app
@@ -20,7 +20,6 @@ window.initWarbler = function() {
 
     app
         .controller('warbler_main_controller', ['$scope', main_controller])
-        .controller('gmapController', ['$scope', 'warbler_model_service', gmap_controller])
     ;
 
     angular.bootstrap(document, ['warbler']);
@@ -32,8 +31,9 @@ window.initWarbler = function() {
     });
 
     $(window).resize(function() {
-        var h = $(window).height()
+        var h = $(window).height() - $('.navbar').height();
 
         $('#gmap').css('height', h);
+        $('#gmap').css('margin-top', $('.navbar').height());
     }).resize();
 }
