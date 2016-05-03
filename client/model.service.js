@@ -33,8 +33,10 @@ module.exports = function($resource, $rootScope, $filter) {
 
                 // listen to event when a new data comes in for each topic
                 references[topic.topic].on('child_added', function(snapshot, prev) {
-                    angular.extend(model[topic.topic], snapshot.val());
-                    $rootScope.$broadcast('model.' + topic.topic + '.added', new Array(snapshot.val()));
+                    var tweet = snapshot.val();
+                    tweet.Timestamp = $filter('date')(new Date(tweet.Timestamp), 'MM/dd/yyyy hh:mm');
+                    angular.extend(model[topic.topic], tweet);
+                    $rootScope.$broadcast('model.' + topic.topic + '.added', new Array(tweet));
                 });
             });
         });
