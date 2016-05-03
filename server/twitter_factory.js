@@ -107,7 +107,7 @@ twitter_service.prototype = {
 
 					for (var i = 0, l = statuses.length; i < l; i++) {
 						var o = statuses[i];
-						if (o.geo) {
+						if (o.geo || o.coordinates) {
 							var twt = o.geo;
 
 							twt.text = o.text;

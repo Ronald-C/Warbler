@@ -10,7 +10,7 @@ window.initWarbler = function() {
     var app = angular.module('warbler', ['ngResource']);
 
     app
-        .service('warbler_model_service', ['$resource', '$rootScope', model_service])
+        .service('warbler_model_service', ['$resource', '$rootScope', '$filter', model_service])
     ;
 
     app
