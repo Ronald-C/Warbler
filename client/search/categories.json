@@ -5,13 +5,15 @@
         "topics": [
             {
                 "label": "Earthquake",
-                "topic": "TweetEarthQuake",
-                "selected": false
+                "topic": "TweetEarthquake",
+                "selected": false,
+                "marker-icon": "img/markers/earthquake-3.png"
             },
             {
                 "label": "Traffic",
                 "topic": "TweetTraffic",
-                "selected": false
+                "selected": false,
+                "marker-icon": "img/markers/traffic-icon.png"
             }
         ]
     },
@@ -22,17 +24,20 @@
             {
                 "label": "Bernie Sanders",
                 "topic": "TweetBernieSanders",
-                "selected": false
+                "selected": false,
+                "marker-icon": "img/markers/bernie-icon.png" 
             },
             {
                 "label": "Hillary Clinton",
                 "topic": "TweetHillaryClinton",
-                "selected": false
+                "selected": false,
+                "marker-icon": "img/markers/hillary-icon.png"
             },
             {
                 "label": "Donald Trump",
                 "topic": "TweetDonaldTrump",
-                "selected": false
+                "selected": false,
+                "marker-icon": "img/markers/donald-icon.png"
             }
         ]
     }

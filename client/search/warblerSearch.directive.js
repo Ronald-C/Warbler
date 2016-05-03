@@ -1,9 +1,13 @@
 module.exports = function() {
-    var controller = function($scope, $resource) {
-        $scope.categories = $resource("search/categories.json").query();
+    var controller = function($scope, model) {
+        $scope.categories = model.categories;
         $scope.toggleTopic = function(topic) {
             topic.selected = !topic.selected;
-            console.log(topic);
+            if (!topic.selected) {
+                topic.control.hide();              
+            } else {
+                topic.control.show();
+            }
         }
 
         console.log("init warblerSearch");
@@ -15,6 +19,6 @@ module.exports = function() {
 
         },
 
-        controller: ['$scope', '$resource', controller]
+        controller: ['$scope', 'warbler_model_service', controller]
     }
 }
